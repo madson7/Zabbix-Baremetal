@@ -1,4 +1,4 @@
-CREATE DATABASE zabbix;
+-- CREATE DATABASE zabbix;
 
 USE zabbix;
 
