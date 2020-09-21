@@ -1,0 +1,280 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-server
+  labels:
+    server: zabbix
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: zabbix
+        octopusexport: OctopusExport
+    spec:
+      hostNetwork: false
+      volumes:
+        - name: snmptraps
+          hostPath:
+            path: snmptraps
+            type: Directory
+      containers:
+        - name: zabbix-server
+          image: 'zabbix/zabbix-server-mysql:ubuntu-5.0-latest'
+          ports:
+            - name: server
+              containerPort: 10051
+          env:
+            - name: MYSQL_DATABASE
+              value: zabbix
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_pwd
+            - name: MYSQL_PASSWORD
+              value: zabbix
+            - name: MYSQL_USER
+              value: zabbix
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: server
+                      operator: In
+                      values:
+                        - zabbix
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-proxy
+  labels:
+    server: proxy
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: proxy
+        octopusexport: OctopusExport
+    spec:
+      hostNetwork: false
+      volumes:
+        - name: snmptraps
+          hostPath:
+            path: snmptraps
+            type: Directory
+      containers:
+        - name: zabbix-proxy
+          image: 'zabbix/zabbix-proxy-mysql:ubuntu-5.0-latest'
+          ports:
+            - name: proxy
+              containerPort: 10051
+          env:
+            - name: MYSQL_DATABASE
+              value: zabbix_proxy
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_pwd
+            - name: MYSQL_PASSWORD
+              value: zabbix
+            - name: MYSQL_USER
+              value: zabbix
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: server
+                      operator: In
+                      values:
+                        - proxy
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-web
+  labels:
+    server: web
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: zabbix-web
+        octopusexport: OctopusExport
+    spec:
+      hostNetwork: false
+      containers:
+        - name: zabbix-web
+          image: 'zabbix/zabbix-web-nginx-mysql:ubuntu-5.0-latest'
+          ports:
+            - name: web
+              containerPort: 8443
+            - name: web
+              containerPort: 8080
+          env:
+            - name: ZBX_SERVER_NAME
+              value: zabbixweb
+            - name: MYSQL_DATABASE
+              value: zabbix
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_pwd
+            - name: MYSQL_PASSWORD
+              value: zabbix
+            - name: MYSQL_USER
+              value: zabbix
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - web
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-java-gateway
+  labels:
+    server: gateway
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: gateway
+        octopusexport: OctopusExport
+    spec:
+      hostNetwork: false
+      containers:
+        - name: zabbix-java-gateway
+          image: 'zabbix/zabbix-java-gateway:ubuntu-5.0-latest'
+          ports:
+            - name: server
+              containerPort: 10052
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - gateway
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-snmptraps
+  labels:
+    server: snmptraps
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: snmptraps
+        octopusexport: OctopusExport
+    spec:
+      hostNetwork: false
+      volumes:
+        - name: snmptraps
+          hostPath:
+            path: snmptraps
+            type: Directory
+      containers:
+        - name: zabbix-snmptraps
+          image: 'zabbix/zabbix-snmptraps:ubuntu-5.0-latest'
+          ports:
+            - name: snmptraps
+              containerPort: 1162
+              protocol: UDP
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - snmptraps
+                topologyKey: kubernetes.io/hostname
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-server
+  labels:
+    server: mysql-server
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: mysql-server
+        octopusexport: OctopusExport
+    spec:
+      hostNetwork: false
+      containers:
+        - name: mysql-server
+          image: 'zabbix-db:0.1'
+          ports:
+            - name: mysql
+              containerPort: 3306
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - mysql
+                topologyKey: kubernetes.io/hostname

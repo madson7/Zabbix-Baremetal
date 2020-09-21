@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-server
+  labels:
+    server: server-zabbix
+spec:
+  selector:
+    matchLabels:
+      deploymentzabbix: deploymentzabbix
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: server-zabbix
+        deploymentzabbix: deploymentzabbix
+    spec:
+      containers:
+        - name: zabbix-server
+          image: 'zabbix/zabbix-server-mysql:ubuntu-5.0-latest'
+          ports:
+            - name: server
+              containerPort: 10051
+          env:
+            - name: MYSQL_DATABASE
+              value: zabbix
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_pwd
+            - name: MYSQL_PASSWORD
+              value: zabbix
+            - name: MYSQL_USER
+              value: zabbix
+            - name: DB_SERVER_HOST
+              value: 172.17.116.170
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-web
+  labels:
+    server: web-zabbix
+spec:
+  selector:
+    matchLabels:
+      deploymentzabbix: deploymentzabbix
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        server: zabbix-web
+        deploymentzabbix: deploymentzabbix
+    spec:
+      containers:
+        - name: zabbix-web
+          image: 'zabbix/zabbix-web-nginx-mysql:ubuntu-5.0-latest'
+          ports:
+            - name: web
+              containerPort: 8443
+            - name: web-http
+              containerPort: 8080
+          env:
+            - name: ZBX_SERVER_NAME
+              value: zabbixweb
+            - name: MYSQL_DATABASE
+              value: zabbix
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_pwd
+            - name: MYSQL_PASSWORD
+              value: zabbix
+            - name: MYSQL_USER
+              value: zabbix
+            - name: DB_SERVER_HOST
+              value: 172.17.116.170
+            - name: ZW_ZBX_SERVER
+              value: zabbix-server
