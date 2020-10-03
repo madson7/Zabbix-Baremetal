@@ -34,4 +34,4 @@ spec:
         - name: DB_SERVER_HOST
           value: 170.82.181.4
         - name: DB_SERVER_PORT
-          value: 15802
+          value: "15802"
