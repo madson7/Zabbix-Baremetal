@@ -35,3 +35,17 @@ spec:
           value: 170.82.181.4
         - name: DB_SERVER_PORT
           value: "15802"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zabbix-server
+spec:
+  selector:
+    app: zabbix-server
+  ports:
+  - name: zabbix-trapper
+    port: 10051
+    protocol: TCP
+    targetPort: 10051
+  type: NodePort

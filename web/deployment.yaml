@@ -2,33 +2,25 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zabbix-web
-  namespace: default
 spec:
-  replicas: 1
-  revisionHistoryLimit: 1
   selector:
     matchLabels:
-      app: web
+      app: zabbix-web
   template:
     metadata:
       labels:
-        app: web
-      namespace: default
+        app: zabbix-web
     spec:
       containers:
-      - image: 'zabbix/zabbix-web-nginx-mysql'
-        imagePullPolicy: IfNotPresent
-        name: zabbix-web
+      - name: zabbix-web
+        image: zabbix/zabbix-web-nginx-mysql
+        # resources:
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
         ports:
         - containerPort: 8080
-          name: http
-          protocol: TCP
-        - containerPort: 8443
-          name: https
-          protocol: TCP
         env:
-        - name: ZBX_SERVER_NAME
-          value: zabbixweb
         - name: MYSQL_DATABASE
           value: zabbix
         - name: MYSQL_USER
@@ -38,6 +30,20 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: root_pwd
         - name: DB_SERVER_HOST
-          value: 192.168.0.55
-        - name: ZBX_SERVER_HOST
-          value: 10.152.183.243
+          value: 170.82.181.4
+        - name: DB_SERVER_PORT
+          value: "15802"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zabbix-web
+spec:
+  selector:
+    app: zabbix-web
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  type: NodePort
