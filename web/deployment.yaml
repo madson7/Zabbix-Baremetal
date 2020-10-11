@@ -14,25 +14,22 @@ spec:
       containers:
       - name: zabbix-web
         image: zabbix/zabbix-web-nginx-mysql
-        # resources:
-        #   limits:
-        #     memory: "128Mi"
-        #     cpu: "500m"
         ports:
         - containerPort: 8080
         env:
-        - name: MYSQL_DATABASE
-          value: zabbix
+        - name: DB_SERVER_HOST
+          value: 192.168.0.55
         - name: MYSQL_USER
           value: zabbix
         - name: MYSQL_PASSWORD
           value: zabbix
-        - name: MYSQL_ROOT_PASSWORD
-          value: root_pwd
-        - name: DB_SERVER_HOST
-          value: 170.82.181.4
-        - name: DB_SERVER_PORT
-          value: "15802"
+        # - name: ZBX_SERVER_HOST
+        #   value: 192.168.0.55
+        # - name: ZBX_SERVER_PORT
+        #   value: "30757"
+        - name: PHP_TZ
+          value: America/Belem
+
 ---
 apiVersion: v1
 kind: Service

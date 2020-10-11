@@ -7,21 +7,33 @@ git clone https://github.com/madson7/zabbix.git
 cd zabbix/
 
 
-```
+sudo docker run -d \
+  --restart=always \
+  --name zabbix-agent \
+  -p 10050:10050 \
+  -v /proc:/host/proc:ro \
+  -v /sys:/host/sys:ro \
+  -v /dev:/host/dev:ro \
+  -v /etc:/host/etc:ro \
+  -v /var/run/docker.sock:/host/var/run/docker.sock \
+  -e HOST=agent \
+  zabbix/zabbix-agent
+
+
+mkdir -p ./zbx_env/usr/lib/zabbix/externalscripts \
+./zbx_env/etc/zabbix/zabbix_agentd.d \
+./zbx_env/var/lib/zabbix/modules \
+./zbx_env/var/lib/zabbix/enc \
+./zbx_env/var/lib/zabbix/snmptraps \
+./zbx_env/var/lib/mysql
 
 ```
-sudo docker run --name mysql-server -t \
-      -e MYSQL_DATABASE="zabbix" \
-      -e MYSQL_USER="zabbix" \
-      -e MYSQL_PASSWORD="zabbix" \
-      -e MYSQL_ROOT_PASSWORD="root_pwd" \
-      -d mysql:5.7 \
-      --character-set-server=utf8 --collation-server=utf8_bin
 
+
+# Agent windows
 ```
 https://www.zabbix.com/download_agents
 C:\zabbix\bin\zabbix_agent2.exe -c C:\zabbix\conf\zabbix_agent2.conf -i
-
 netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" protocol="icmpv4:8,any" dir=in action=allow
-netsh advfirewall firewall add rule name="Open Port 32534" dir=in action=allow protocol=TCP localport=32534
-
+netsh advfirewall firewall add rule name="Open Port 10050" dir=in action=allow protocol=TCP localport=10050
+```

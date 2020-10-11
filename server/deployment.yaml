@@ -13,28 +13,43 @@ spec:
     spec:
       containers:
       - name: zabbix-server
-        image: zabbix/zabbix-server-mysql:alpine-5.0-latest
-        # resources:
-        #   limits:
-        #     memory: "128Mi"
-        #     cpu: "500m"
+        image: zabbix/zabbix-server-mysql
         ports:
         - containerPort: 10051
-          name: server
+          name: zabbix-trapper
           protocol: TCP
         env:
-        - name: MYSQL_DATABASE
-          value: zabbix
         - name: MYSQL_USER
           value: zabbix
         - name: MYSQL_PASSWORD
           value: zabbix
         - name: MYSQL_ROOT_PASSWORD
           value: root_pwd
+        - name: MYSQL_DATABASE
+          value: zabbix
         - name: DB_SERVER_HOST
           value: 170.82.181.4
         - name: DB_SERVER_PORT
           value: "15802"
+        # - name: ZBX_JAVAGATEWAY_ENABLE
+        #   value: true
+        # - name: ZBX_STARTJAVAPOLLERS
+        #   value: 5
+        # - name: ZBX_ENABLE_SNMP_TRAPS
+        #   value: true
+        
+# verificar os volumes no kubenetes segue os usados no compose
+  # volumes:
+  #  - /etc/localtime:/etc/localtime:ro
+  #  - /etc/timezone:/etc/timezone:ro 
+  #  - ./zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
+  #  - ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
+  #  - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
+  #  - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
+  #  - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+  #  - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
+  #  - ./zbx_env/var/lib/zabbix/snmptraps:/var/lib/zabbix/snmptraps:ro
+
 ---
 apiVersion: v1
 kind: Service
