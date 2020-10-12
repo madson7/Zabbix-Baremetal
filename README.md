@@ -13,10 +13,10 @@ mkdir -p ./zbx_env/usr/lib/zabbix/externalscripts \
 ./zbx_env/var/lib/zabbix/snmptraps \
 ./zbx_env/var/lib/mysql
 
-kubectl apply -f config/
-kubectl apply -f zabbix/server/
-kubectl apply -f zabbix/web/
-kubectl apply -f grafana/
+sudo microk8s kubectl apply -f config/
+sudo microk8s kubectl apply -f zabbix/server/
+sudo microk8s kubectl apply -f zabbix/web/
+sudo microk8s kubectl apply -f grafana/
 
 
 

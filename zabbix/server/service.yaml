@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: monitoring
   name: zabbix-server
+  namespace: monitoring
 spec:
   selector:
     app: zabbix-server
   ports:
   - name: zabbix-trapper
-    type: NodePort
     protocol: TCP
     port: 10051
     targetPort: 10051
-    nodePort: 3005
+    nodePort: 30051
+  type: NodePort
