@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zabbix-server
+  # namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: zabbix-server
+  template:
+    metadata:
+      # namespace: monitoring
+      labels:
+        app: zabbix-server
+    spec:
+      containers:
+      - name: zabbix-server
+        image: zabbix/zabbix-server-mysql
+        ports:
+        - containerPort: 10051
+          name: zabbix-trapper
+          protocol: TCP
+        env:
+        - name: MYSQL_USER
+          value: zabbix
+        - name: MYSQL_PASSWORD
+          value: zabbix
+        - name: MYSQL_ROOT_PASSWORD
+          value: root_pwd
+        - name: MYSQL_DATABASE
+          value: zabbix
+        - name: DB_SERVER_HOST
+          value: 170.82.181.4
+        - name: DB_SERVER_PORT
+          value: "15802"
+      #   - name: ZBX_JAVAGATEWAY_ENABLE
+      #     value: true
+      #   - name: ZBX_STARTJAVAPOLLERS
+      #     value: 5
+      #   - name: ZBX_ENABLE_SNMP_TRAPS
+      #     value: true
+      #   volumeMounts:
+      #   - mountPath: ""
+      #     name: zabbix-server-pv
+      # volumes:
+      # - name: zabbix-server-pv
+      #   persistentVolumeClaim:
+      #     claimName: zabbix-server-pv-claim

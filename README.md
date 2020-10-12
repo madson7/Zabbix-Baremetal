@@ -6,6 +6,25 @@ git clone https://github.com/madson7/zabbix.git
 
 cd zabbix/
 
+mkdir -p ./zbx_env/usr/lib/zabbix/externalscripts \
+./zbx_env/etc/zabbix/zabbix_agentd.d \
+./zbx_env/var/lib/zabbix/modules \
+./zbx_env/var/lib/zabbix/enc \
+./zbx_env/var/lib/zabbix/snmptraps \
+./zbx_env/var/lib/mysql
+
+kubectl apply -f config/
+kubectl apply -f zabbix/server/
+kubectl apply -f zabbix/web/
+kubectl apply -f grafana/
+
+
+
+
+
+
+
+
 
 sudo docker run -d \
   --restart=always \
@@ -18,14 +37,6 @@ sudo docker run -d \
   -v /var/run/docker.sock:/host/var/run/docker.sock \
   -e HOST=agent \
   zabbix/zabbix-agent
-
-
-mkdir -p ./zbx_env/usr/lib/zabbix/externalscripts \
-./zbx_env/etc/zabbix/zabbix_agentd.d \
-./zbx_env/var/lib/zabbix/modules \
-./zbx_env/var/lib/zabbix/enc \
-./zbx_env/var/lib/zabbix/snmptraps \
-./zbx_env/var/lib/mysql
 
 ```
 

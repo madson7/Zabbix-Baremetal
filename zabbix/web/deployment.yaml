@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: monitoring
   name: zabbix-web
 spec:
   selector:
@@ -8,6 +9,7 @@ spec:
       app: zabbix-web
   template:
     metadata:
+      namespace: monitoring
       labels:
         app: zabbix-web
     spec:
@@ -29,18 +31,3 @@ spec:
         #   value: "30757"
         - name: PHP_TZ
           value: America/Belem
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: zabbix-web
-spec:
-  selector:
-    app: zabbix-web
-  ports:
-  - name: web
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  type: NodePort
