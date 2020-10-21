@@ -19,7 +19,7 @@ sudo microk8s kubectl apply -f zabbix/web/
 sudo microk8s kubectl apply -f grafana/
 
 
-
+sudo microk8s kubectl exec -it zabbix-server-6c8895df8-ss4j2 -- ls /usr/lib/zabbix/alertscripts
 
 
 
