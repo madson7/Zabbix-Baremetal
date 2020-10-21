@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: List
+metadata:
+ namespace: zabbix
+items:
+  - apiVersion: v1
+    kind: Secret
+    type: Opaque
+    metadata:
+     name: db-secret
+     namespace: zabbix
+    data:
+     db-root-pass: "root_pwd"
+     db-zbx-user: "zabbix"
+     db-zbx-pass: "db_zabbix"
