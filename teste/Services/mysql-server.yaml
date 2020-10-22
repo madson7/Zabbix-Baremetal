@@ -13,3 +13,4 @@ spec:
     name: mysql-server
   selector:
     name: mysql-server
+  # type: NodePort
