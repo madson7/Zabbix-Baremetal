@@ -10,6 +10,6 @@ items:
      name: db-secret
      namespace: zabbix
     data:
-     db-root-pass: "c29tZV90ZXN0X3Bhc3M="
-     db-zbx-user: "zabbix78"
-     db-zbx-pass: "emJ4X3Bhc3N3b3Jk"
+     db-root-pass: "cm9vdF9wd2Q="
+     db-zbx-user: "emFiYml4"
+     db-zbx-pass: "emFiYml4"

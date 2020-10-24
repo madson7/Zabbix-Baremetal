@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: zabbix-server
+  labels:
+    app: zabbix
+    tier: server
+    environment: dev
+  namespace: zabbix
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: zabbix-server
+        app: zabbix
+    spec:
+      containers:
+        - name: zabbix-server
+          image: zabbix/zabbix-server-mysql:alpine-5.0-latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 10051
+            protocol: TCP
+            name: zabbix-trapper
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: zabbix-trapper
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: zabbix-trapper
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 20
+          env:
+          - name: MYSQL_USER
+            valueFrom:
+             secretKeyRef:
+              name: db-secret
+              key: db-zbx-user
+          - name: MYSQL_PASSWORD
+            valueFrom:
+             secretKeyRef:
+              name: db-secret
+              key: db-zbx-pass
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+             secretKeyRef:
+              name: db-secret
+              key: db-root-pass
+          - name: MYSQL_DATABASE
+            value: "zabbix"
+          - name: ZBX_JAVAGATEWAY_ENABLE
+            value: "true"
+          - name: ZBX_STARTJAVAPOLLERS
+            value: "5"
+          - name: ZBX_ENABLE_SNMP_TRAPS
+            value: "true"
+          - name: ZBX_STARTPROXYPOLLERS
+            value: "5"
+          - name: ZBX_PROXYCONFIGFREQUENCY
+            value: "60"
+          volumeMounts:
+          - name: zabbix-db-storage
+            mountPath: /var/lib/zabbix/snmptraps/
+            readOnly: true
+        - name: zabbix-snmptraps
+          image: zabbix/zabbix-snmptraps:alpine-5.0-latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 1162
+            protocol: UDP
+            name: snmp-trap
+          volumeMounts:
+          - name: zabbix-db-storage
+            mountPath: /var/lib/zabbix/snmptraps/
+            readOnly: false
+      volumes:
+       - hostPath:
+          path: /zabbix/
+         name: zabbix-db-storage

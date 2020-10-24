@@ -1,44 +1,23 @@
-# zabbix
-
-
-```
 git clone https://github.com/madson7/zabbix.git
 
 cd zabbix/
 
-mkdir -p ./zbx_env/usr/lib/zabbix/externalscripts \
-./zbx_env/etc/zabbix/zabbix_agentd.d \
-./zbx_env/var/lib/zabbix/modules \
-./zbx_env/var/lib/zabbix/enc \
-./zbx_env/var/lib/zabbix/snmptraps \
-./zbx_env/var/lib/mysql
+sudo microk8s.enable dns
 
-sudo microk8s kubectl apply -f config/
-sudo microk8s kubectl apply -f zabbix/server/
-sudo microk8s kubectl apply -f zabbix/web/
-sudo microk8s kubectl apply -f grafana/
+sudo microk8s kubectl apply -f ./Configs/Namespace.yaml
 
+sudo microk8s kubectl apply -f ./Configs/List.yaml
 
-sudo microk8s kubectl exec -it zabbix-server-6c8895df8-ss4j2 -- ls /usr/lib/zabbix/alertscripts
+sudo microk8s kubectl apply -f ./Volumes/zabbix-mysql-data.yaml
 
+sudo microk8s kubectl apply -f ./Replication/mysql-server.yaml
+sudo microk8s kubectl apply -f ./Replication/
 
+sudo microk8s kubectl apply -f ./Services/mysql-server.yaml
+sudo microk8s kubectl apply -f ./Services/
+sudo microk8s kubectl apply -f ./Services/
 
 
-
-
-sudo docker run -d \
-  --restart=always \
-  --name zabbix-agent \
-  -p 10050:10050 \
-  -v /proc:/host/proc:ro \
-  -v /sys:/host/sys:ro \
-  -v /dev:/host/dev:ro \
-  -v /etc:/host/etc:ro \
-  -v /var/run/docker.sock:/host/var/run/docker.sock \
-  -e HOST=agent \
-  zabbix/zabbix-agent
-
-```
 
 
 # Agent windows

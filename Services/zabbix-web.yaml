@@ -17,3 +17,4 @@ spec:
     name: zabbix-web
   # externalIPs:
   # - <Specify external IP here>
+  type: NodePort
