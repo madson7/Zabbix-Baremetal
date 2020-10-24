@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: monitoring
+  namespace: zabbix
   name: grafana
 spec:
   selector:
@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: grafana
-      namespace: monitoring
+      namespace: zabbix
     spec:
       securityContext:
         runAsUser: 472
@@ -23,7 +23,7 @@ spec:
         - name: GF_SECURITY_ADMIN_PASSWORD
           value: admin
         - name: GF_INSTALL_PLUGINS
-          value: alexanderzobnin-zabbix-app 3.12.0 #,snuids-radar-panel,magnesium-wordcloud-panel,grafana-clock-panel,grafana-piechart-panel,camptocamp-prometheus-alertmanager-datasource,vonage-status-panel,grafana-worldmap-panel,raintank-worldping-app,agenty-flowcharting-panel
+          value: alexanderzobnin-zabbix-app 3.12.0,snuids-radar-panel,magnesium-wordcloud-panel,grafana-clock-panel,grafana-piechart-panel,camptocamp-prometheus-alertmanager-datasource,vonage-status-panel,grafana-worldmap-panel,raintank-worldping-app,agenty-flowcharting-panel
         ports:
         - containerPort: 3000
       #   volumeMounts:
@@ -33,3 +33,4 @@ spec:
       # - name: grafana-storage
       #   persistentVolumeClaim:
       #       claimName: grafana-pvc
+      d
