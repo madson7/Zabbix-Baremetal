@@ -9,7 +9,14 @@ sudo microk8s.enable dns
 ## Configs Zabbix e Mysql
 ```
 sudo microk8s kubectl apply -f ./Configs/
-<!-- sudo microk8s kubectl apply -f ./Volumes/zabbix-mysql-data.yaml -->
+```
+
+## Volumes
+```
+sudo mkdir /externalscripts
+# echo 'I love Kubernetes storage!' > /externalscripts/teste.txt
+
+sudo microk8s kubectl apply -f ./Volumes/zabbix-mysql-data.yaml
 ```
 
 ## Replication Zabbix e Mysql
@@ -17,6 +24,9 @@ sudo microk8s kubectl apply -f ./Configs/
 sudo microk8s kubectl apply -f ./Replication/
 sudo microk8s kubectl apply -f ./Services/
 ```
+
+sudo microk8s kubectl exec zabbix-server-rh87r -n zabbix -- cat /usr/share/zabbix/externalscripts/teste.txt
+
 
 ## Grafana
 ```

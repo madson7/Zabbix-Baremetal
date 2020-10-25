@@ -1,22 +1,22 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: zabbix-mysql-data
+  namespace: zabbix
+  name: zabbix-server-pv
   labels:
     type: local
-  namespace: zabbix
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data"
+    path: "/externalscripts"
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: zabbix-mysql-data-claim
+  name: zabbix-server-laim
   namespace: zabbix
 spec:
   accessModes:
@@ -24,4 +24,3 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: zabbix-mysql-data

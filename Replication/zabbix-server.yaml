@@ -22,17 +22,7 @@ spec:
           ports:
           - containerPort: 10051
             protocol: TCP
-            name: zabbix-trapper
-          # readinessProbe:
-          #   tcpSocket:
-          #     port: zabbix-trapper
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 10
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: zabbix-trapper
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 20
+            name: zabbix-server
           env:
           - name: MYSQL_USER
             valueFrom:
@@ -51,32 +41,10 @@ spec:
               key: db-root-pass
           - name: MYSQL_DATABASE
             value: "zabbix"
-          - name: ZBX_JAVAGATEWAY_ENABLE
-            value: "true"
-          - name: ZBX_STARTJAVAPOLLERS
-            value: "5"
-          - name: ZBX_ENABLE_SNMP_TRAPS
-            value: "true"
-          - name: ZBX_STARTPROXYPOLLERS
-            value: "5"
-          - name: ZBX_PROXYCONFIGFREQUENCY
-            value: "60"
           volumeMounts:
-          - name: zabbix-db-storage
-            mountPath: /var/lib/zabbix/snmptraps/
-            readOnly: true
-        - name: zabbix-snmptraps
-          image: zabbix/zabbix-snmptraps:alpine-5.0-latest
-          imagePullPolicy: Always
-          ports:
-          - containerPort: 1162
-            protocol: UDP
-            name: snmp-trap
-          volumeMounts:
-          - name: zabbix-db-storage
-            mountPath: /var/lib/zabbix/snmptraps/
-            readOnly: false
+          - mountPath: "/usr/share/zabbix/externalscripts/"
+            name: externalscripts
       volumes:
-       - hostPath:
-          path: /zabbix/
-         name: zabbix-db-storage
+        - name: externalscripts
+          persistentVolumeClaim:
+            claimName: zabbix-server-laim
