@@ -42,7 +42,7 @@ spec:
           - name: MYSQL_DATABASE
             value: "zabbix"
           volumeMounts:
-          - mountPath: "/usr/share/zabbix/externalscripts/"
+          - mountPath: "/usr/lib/zabbix/externalscripts/"
             name: externalscripts
       volumes:
         - name: externalscripts

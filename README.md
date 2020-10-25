@@ -14,7 +14,6 @@ sudo microk8s kubectl apply -f ./Configs/
 ## Volumes
 ```
 sudo mkdir /externalscripts
-# echo 'I love Kubernetes storage!' > /externalscripts/teste.txt
 
 sudo microk8s kubectl apply -f ./Volumes/zabbix-mysql-data.yaml
 ```
@@ -25,8 +24,7 @@ sudo microk8s kubectl apply -f ./Replication/
 sudo microk8s kubectl apply -f ./Services/
 ```
 
-sudo microk8s kubectl exec zabbix-server-rh87r -n zabbix -- cat /usr/share/zabbix/externalscripts/teste.txt
-
+sudo microk8s kubectl exec zabbix-server-k7fvz -n zabbix -- ls /usr/lib/zabbix/externalscripts/
 
 ## Grafana
 ```
