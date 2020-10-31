@@ -11,12 +11,23 @@ sudo microk8s.enable dns
 sudo microk8s kubectl apply -f ./Configs/
 ```
 
+## Path
+```
+sudo mkdir -p /zbx_env/usr/lib/zabbix/alertscripts \
+  /zbx_env/usr/lib/zabbix/externalscripts \
+  /zbx_env/var/lib/zabbix/modules \
+  /zbx_env/var/lib/zabbix/enc \
+  /zbx_env/var/lib/zabbix/snmptraps \
+  /zbx_env/var/lib/zabbix/mibs \
+  /zbx_env/var/lib/zabbix/export
+
+sudo mkdir /MYSQL
+```
+<!-- 
 ## Volumes
 ```
-sudo mkdir /externalscripts
-
-sudo microk8s kubectl apply -f ./Volumes/zabbix-mysql-data.yaml
-```
+sudo microk8s kubectl apply -f ./Volumes/
+``` -->
 
 ## Replication Zabbix e Mysql
 ```
@@ -24,15 +35,17 @@ sudo microk8s kubectl apply -f ./Replication/
 sudo microk8s kubectl apply -f ./Services/
 ```
 
-sudo microk8s kubectl exec zabbix-server-k7fvz -n zabbix -- ls /usr/lib/zabbix/externalscripts/
-
 ## Grafana
 ```
 sudo microk8s kubectl apply -f ./grafana/
 ```
 
-http://192.168.0.55:30140/api_jsonrpc.php
+http://<IP-Zabbix-Web>:<Port>/api_jsonrpc.php
 
+## CMD
+```
+sudo microk8s kubectl exec zabbix-server-k7fvz -n zabbix -- ls /usr/lib/zabbix/externalscripts/
+```
 
 
 ## Agent windows

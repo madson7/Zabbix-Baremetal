@@ -42,9 +42,45 @@ spec:
           - name: MYSQL_DATABASE
             value: "zabbix"
           volumeMounts:
-          - mountPath: "/usr/lib/zabbix/externalscripts/"
-            name: externalscripts
+          - name: alertscripts
+            mountPath: /usr/lib/zabbix/alertscripts
+          volumeMounts:
+          - name: externalscripts
+            mountPath: /usr/lib/zabbix/externalscripts
+          volumeMounts:
+          - name: modules
+            mountPath: /var/lib/zabbix/modules
+          volumeMounts:
+          - name: enc
+            mountPath: /var/lib/zabbix/enc
+          volumeMounts:
+          - name: snmptraps
+            mountPath: /var/lib/zabbix/snmptraps
+          volumeMounts:
+          - name: mibs
+            mountPath: /var/lib/zabbix/mibs
+          volumeMounts:
+          - name: export
+            mountPath: /var/lib/zabbix/export
       volumes:
-        - name: externalscripts
-          persistentVolumeClaim:
-            claimName: zabbix-server-laim
+       - hostPath:
+          path: /zbx_env/usr/lib/zabbix/alertscripts
+         name: alertscripts
+       - hostPath:
+          path: /zbx_env/usr/lib/zabbix/externalscripts
+         name: externalscripts
+       - hostPath:
+          path: /zbx_env/var/lib/zabbix/modules
+         name: modules
+       - hostPath:
+          path: /zbx_env/var/lib/zabbix/enc
+         name: enc
+       - hostPath:
+          path: /zbx_env/var/lib/zabbix/snmptraps
+         name: snmptraps
+       - hostPath:
+          path: /zbx_env/var/lib/zabbix/mibs
+         name: mibs
+       - hostPath:
+          path: /zbx_env/var/lib/zabbix/export
+         name: export

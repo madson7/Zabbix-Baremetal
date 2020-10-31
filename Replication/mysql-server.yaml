@@ -40,11 +40,10 @@ spec:
           - name: MYSQL_DATABASE
             value: "zabbix"
           args: ["--default-authentication-plugin=mysql_native_password"]
-          # volumeMounts:
-          #  - mountPath: "/var/lib/mysql/"
-          #    name: zabbix-mysql-data
-          #    readOnly: false
-      # volumes:
-      #  - name: zabbix-mysql-data
-      #    persistentVolumeClaim:
-      #     claimName: zabbix-mysql-data-claim
+          volumeMounts:
+          - name: mysql
+            mountPath: /var/lib/mysql
+      volumes:
+       - hostPath:
+          path: /MYSQL
+         name: mysql

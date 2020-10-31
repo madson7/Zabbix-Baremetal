@@ -2,7 +2,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   namespace: zabbix
-  name: zabbix-server-pv
+  name: mysql-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /zbx_env
+    path: /MYSQL
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: zabbix-server-claim
+  name: mysql-claim
   namespace: zabbix
 spec:
   accessModes:
