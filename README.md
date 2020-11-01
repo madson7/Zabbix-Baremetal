@@ -1,7 +1,10 @@
 # Zabbix
+Cluster com microk8s
+
+
 ```
-git clone https://github.com/madson7/zabbix.git
-cd zabbix/
+git clone https://github.com/madson7/Zabbix.git
+cd Zabbix/
 ```
 
 sudo microk8s.enable dns
@@ -22,6 +25,8 @@ sudo mkdir -p /zbx_env/usr/lib/zabbix/alertscripts \
   /zbx_env/var/lib/zabbix/export
 
 sudo mkdir /MYSQL
+
+sudo mkdir /grafana
 ```
 <!-- 
 ## Volumes
